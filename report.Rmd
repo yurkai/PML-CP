@@ -20,14 +20,14 @@ train <- train[,!minusCol]
 ```
 
 #### Using `user_name` variable
-I saw on forums that it's not necessary to use ID variable. I believe different persons can do things in different ways. That's why I didn't omit this variable. Here's a plot that shows my motivation. For some users parameters may be significant different.
+I know some students have opinions that it's not necessary to use ID variable. I believe different persons can do things in different ways. That's why I didn't omit this variable. Here's a plot that shows my motivation. For some users parameters may be significant different.
 
 ```{r cache=TRUE, message=FALSE}
 qplot(train[,1], train[,2], colour = train$classe)
 ```
 
-
-It could be the shortest report ever because all is need to run this code:
+### Gradient boosting method
+Gradient boosting method showed excellent results but it took pretty long time to train model (more than 30 minutes). Accuracy on training set is higher 99%. This model gave 20/20 answers on final test.
 ```{r cache=TRUE, message=FALSE}
 library(caret)
 # fit_gbm <- train(classe ~., data = tr, method = "gbm")
@@ -35,5 +35,22 @@ fit_gbm <- readRDS("gbm01.rds")
 confusionMatrix(predict(fit_gbm, train), train$classe)
 ```
 
-It gives 20/20 answers. While we have correct answers and some time let's try something else just for fun.
+### Random forests
+Default settings of training model using random forests causing leads to long training time. Using cross validation tuning it's possible to reduce training time. Parameter `number` divides training set on 2 folds in my case (while default settings have 25 resampling iterations). This gives 100% accuracy on training set and 20/20 on test set. Training time was about 6 minutes and it increases by 5-6 minutes with every new fold.
 
+```{r}
+library(caret)
+# set.seed(19)
+# fit_rf2 <- train(classe ~., 
+#                 method="rf", 
+#                 trControl=trainControl(method = "cv",
+#                                        number = 2), 
+#                 data=train)
+fit_rf2 <- readRDS("fit_rf2.rds")
+confusionMatrix(predict(fit_rf2, train), train$classe)
+```
+
+### Conclusion
+Both methods, Gradient Boosting and Random Forests gave excellent results on training set with accuracy >99% and 100% respectively. Both methods passed final test 20/20. Full code and models available on my repo: https://github.com/yurkai/PML-CP
+
+Ps. To my mind this project was controversial. Because I used really sophisticated and complex methods just with few lines of code without understanding of inner mechanics of these methods. If you'll say that I better spend time on it and there are tons of information you will probably right, that's why took another few courses dedicated machine and statistical learning. Thanks.
