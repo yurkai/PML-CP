@@ -1,0 +1,39 @@
+---
+title: 'PML: Course Project'
+author: "Yuri Isakov"
+date: "28 January 2016"
+output: html_document
+---
+
+### Obtaining data
+
+Training and test set was downloaded into working directory. Then empty columns were excluded. Actually it could be done in more elegant way during loading csv files.
+```{r}
+train <- read.csv("pml-training.csv", stringsAsFactors = FALSE)
+test <- read.csv("pml-testing.csv", stringsAsFactors = FALSE)
+minusCol1 <- colSums(train == "") > 10000
+minusCol1[is.na(minusCol1)]  <- TRUE
+minusCol2 <- colSums(is.na(train)) > 10000
+minusCol <- minusCol1 | minusCol2
+minusCol[c(1, 3:6)] <- TRUE
+train <- train[,!minusCol]
+```
+
+#### Using `user_name` variable
+I saw on forums that it's not necessary to use ID variable. I believe different persons can do things in different ways. That's why I didn't omit this variable. Here's a plot that shows my motivation. For some users parameters may be significant different.
+
+```{r cache=TRUE, message=FALSE}
+qplot(train[,1], train[,2], colour = train$classe)
+```
+
+
+It could be the shortest report ever because all is need to run this code:
+```{r cache=TRUE, message=FALSE}
+library(caret)
+# fit_gbm <- train(classe ~., data = tr, method = "gbm")
+fit_gbm <- readRDS("gbm01.rds")
+confusionMatrix(predict(fit_gbm, train), train$classe)
+```
+
+It gives 20/20 answers. While we have correct answers and some time let's try something else just for fun.
+
