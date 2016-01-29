@@ -128,10 +128,8 @@ confusionMatrix(predict(fit_gbm, train), train$classe)</code></pre>
 <div id="random-forests" class="section level3">
 <h3>Random forests</h3>
 <p>Default settings of training model using random forests causing leads to long training time. Using cross validation tuning it’s possible to reduce training time. Parameter <code>number</code> divides training set on 2 folds in my case (while default settings have 25 resampling iterations). This gives 100% accuracy on training set and 20/20 on test set. Training time was about 6 minutes and it increases by 5-6 minutes with every new fold.</p>
-<pre class="r"><code>library(caret)</code></pre>
-<pre><code>## Loading required package: lattice
-## Loading required package: ggplot2</code></pre>
-<pre class="r"><code># set.seed(19)
+<pre class="r"><code>library(caret)
+# set.seed(19)
 # fit_rf2 &lt;- train(classe ~., 
 #                 method=&quot;rf&quot;, 
 #                 trControl=trainControl(method = &quot;cv&quot;,
@@ -139,9 +137,6 @@ confusionMatrix(predict(fit_gbm, train), train$classe)</code></pre>
 #                 data=train)
 fit_rf2 &lt;- readRDS(&quot;fit_rf2.rds&quot;)
 confusionMatrix(predict(fit_rf2, train), train$classe)</code></pre>
-<pre><code>## Loading required package: randomForest
-## randomForest 4.6-12
-## Type rfNews() to see new features/changes/bug fixes.</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference

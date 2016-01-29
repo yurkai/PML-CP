@@ -2,7 +2,7 @@
 title: 'PML: Course Project'
 author: "Yuri Isakov"
 date: "28 January 2016"
-output: html_document
+output: md_document
 ---
 
 ### Obtaining data
@@ -23,6 +23,7 @@ train <- train[,!minusCol]
 I know some students have opinions that it's not necessary to use ID variable. I believe different persons can do things in different ways. That's why I didn't omit this variable. Here's a plot that shows my motivation. For some users parameters may be significant different.
 
 ```{r cache=TRUE, message=FALSE}
+library(ggplot2)
 qplot(train[,1], train[,2], colour = train$classe)
 ```
 
